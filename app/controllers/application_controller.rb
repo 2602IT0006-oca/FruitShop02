@@ -1,21 +1,35 @@
+# app/controllers/application_controller.rb
+
 class ApplicationController < ActionController::Base
-  # Deviseのコントローラ実行時にストロングパラメータを設定
+  include Devise::Controllers::Helpers
+
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  # ログイン後の遷移先を設定
-  def after_sign_in_path_for(resource)
-    mypage_path(resource)
-  end
-
-  # ログアウト後の遷移先を設定
-  def after_sign_out_path_for(resource)
-    root_path
-  end
+  before_action :store_recent_product
 
   protected
 
-  # サインアップ時に name と admin_flg を許可
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :admin_flg])
+    devise_parameter_sanitizer.permit(
+      :sign_up,
+      keys: [:name, :admin_flg]
+    )
+  end
+
+  private
+
+  def store_recent_product
+    if params[:controller] == 'products' &&
+       params[:action] == 'show'
+
+      product_id = params[:id].to_i
+
+      session[:recent_product_ids] ||= []
+      session[:recent_product_ids].delete(product_id)
+      session[:recent_product_ids].unshift(product_id)
+      session[:recent_product_ids] =
+        session[:recent_product_ids].take(5)
+    end
+
+    puts session[:recent_product_ids].inspect
   end
 end

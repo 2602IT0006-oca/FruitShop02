@@ -58,12 +58,12 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
-  private
+private
 
-    # ストロングパラメータで、フォームから送信されたデータを許可する
-    def product_params
-      params.require(:product).permit(:name, :description, :price)
-    end
+# ストロングパラメータで、フォームから送信されたデータを許可する
+def product_params
+  params.require(:product).permit(:name, :description, :price, :image)
+end
 
     # 管理者確認メソッド
     def check_admin
