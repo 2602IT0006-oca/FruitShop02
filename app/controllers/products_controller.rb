@@ -1,4 +1,3 @@
-# app/controllers/products_controller.rb
 class ProductsController < ApplicationController
   # index・showアクション以外は管理者のみアクセス可能
   before_action :check_admin, except: [:index, :show]
@@ -58,12 +57,12 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
-private
+  private
 
-# ストロングパラメータで、フォームから送信されたデータを許可する
-def product_params
-  params.require(:product).permit(:name, :description, :price, :image)
-end
+    # ストロングパラメータで、フォームから送信されたデータを許可する
+    def product_params
+      params.require(:product).permit(:name, :description, :price, :photo)
+    end
 
     # 管理者確認メソッド
     def check_admin
